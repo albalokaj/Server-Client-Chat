@@ -5,23 +5,23 @@ port = 12000
 print("Server: " + serverName)
 print("Port: " + str(port))
 
-global soketi
+global sock
 def funct():
     while 1:
         try:
-            soketi = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            soketi.connect((serverName, port))
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((serverName, port))
             break
         except socket.error as error:
             print("Couldn't connect.")
             return
 
 
-    name = str(soketi.recv(1024), "utf-8")
+    name = str(sock.recv(1024), "utf-8")
     you = input("Write your name: ")
-    soketi.sendall(str.encode(you))
+    sock.sendall(str.encode(you))
     while 1:
-        answer = str(soketi.recv(1024), "utf-8")
+        answer = str(sock.recv(1024), "utf-8")
         if answer == "quit":
             print(name + " ended the conversation")
             break
@@ -33,7 +33,7 @@ def funct():
             if data == "over":
                 break
             if data == "quit":
-                soketi.sendall(str.encode(data))
+                sock.sendall(str.encode(data))
                 print("You ended the conversation")
                 break
             lines += data + "\n"
@@ -41,7 +41,7 @@ def funct():
 
         if len(str.encode(lines)) > 0:
             print("Typing...")
-            soketi.sendall(str.encode(lines))
+            sock.sendall(str.encode(lines))
     return
 
 funct()

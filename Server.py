@@ -3,20 +3,20 @@ from _thread import *
 
 host = "alba.local"
 port = 12000
-global soketi
+global sock
 
 #Socket
 try:
-    soketi = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 except socket.error as error:
     print("Error: " + str(error))
 
 #Connect host with port
 try:
-    soketi.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    soketi.bind((host, port))
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind((host, port))
     print("Port: " + str(port))
-    soketi.listen(10)
+    sock.listen(10)
     print("Server is ready to receive")
 except socket.error as error:
     print("Error: " + str(error))
@@ -49,10 +49,9 @@ def thread(connection, address):
     connection.close()
     return
 
-#Lidhja e serverit me klientin
 try:
     while 1:
-        connection, address = soketi.accept()
+        connection, address = sock.accept()
         print("Server is connected to the IP address " + str(address[0]) + " and port " + str(address[1]))
         start_new_thread(thread, (connection, address))
 except socket.error as error:
